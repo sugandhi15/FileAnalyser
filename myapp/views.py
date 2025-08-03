@@ -63,8 +63,8 @@ class FileUploadView(APIView):
             # if not request.data.get('file'):
             #     return Response({"error": "File is required"}, status=400)
             
-            if not user:
-                return Response({"error": "User not found"}, status=404)
+            # if not user:
+                # return Response({"error": "User not found"}, status=404)
             
             # data = request.data.copy()
             # data['user'] = user.id
@@ -83,9 +83,10 @@ class FileUploadView(APIView):
             
             return Response(serializer.errors, status=400)
         
-        except User.DoesNotExist:
-            return Response({"error": "User not found"}, status=404)
-        
+        except User.DoesNotExist as e:
+            return Response({"error": "User not found", "details": str(e)}, status=404)
+        except KeyError as e:
+            return Response({"error": f"Missing key: {str(e)}"}, status=400)
         except Exception as e:
             return Response({"error": str(e)}, status=500)
         
