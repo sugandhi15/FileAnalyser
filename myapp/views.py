@@ -57,17 +57,24 @@ class FileUploadView(APIView):
             
             user_id = decoded_payload.get('user_id')
             user = User.objects.get(id=user_id)
-            request.data['user'] = user.id
-            request.data['file'] = request.FILES.get('file')
+            # request.data['user'] = user.id
+            # request.data['file'] = request.FILES.get('file')
 
-            if not request.data.get('file'):
-                return Response({"error": "File is required"}, status=400)
+            # if not request.data.get('file'):
+            #     return Response({"error": "File is required"}, status=400)
             
-            if not user:
-                return Response({"error": "User not found"}, status=404)
+            # if not user:
+            #     return Response({"error": "User not found"}, status=404)
+            
+            # data = request.data.copy()
+            # data['user'] = user.id
+            if not request.FILES.get('file'):
+                return Response({"error": "File is required"}, status=400)
             
             data = request.data.copy()
             data['user'] = user.id
+            data['file'] = request.FILES['file'] 
+
             serializer = DocumentSerializer(data=data)
 
             if serializer.is_valid():
