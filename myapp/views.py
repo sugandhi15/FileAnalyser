@@ -54,9 +54,9 @@ class FileUploadView(APIView):
 
             if 'error' in decoded_payload:
                 return Response({"error": decoded_payload['error']}, status=401)
-            
-            user_id = decoded_payload.get('user_id')
-            user = User.objects.get(id=user_id)
+
+            user_email = decoded_payload.get('email')
+            user = User.objects.get(email=user_email)
             # request.data['user'] = user.id
             # request.data['file'] = request.FILES.get('file')
 
@@ -72,7 +72,7 @@ class FileUploadView(APIView):
                 return Response({"error": "File is required"}, status=400)
             
             data = request.data.copy()
-            data['user'] = user.id
+            # data['user'] = user.id
             data['file'] = request.FILES['file'] 
 
             serializer = DocumentSerializer(data=data)

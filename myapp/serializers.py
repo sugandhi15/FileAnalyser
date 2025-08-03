@@ -9,4 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
 class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document
-        fields = ['file', 'uploaded_at']
+        fields = ['user', 'file', 'uploaded_at']
+        extra_kwargs = {
+            'user': {'required': True},
+        }
