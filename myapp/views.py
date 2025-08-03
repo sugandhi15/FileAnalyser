@@ -72,7 +72,7 @@ class FileUploadView(APIView):
                 return Response({"error": "File is required"}, status=400)
             
             data = request.data.copy()
-            # data['user'] = user.id
+            data['user'] = user.id
             data['file'] = request.FILES['file'] 
 
             serializer = DocumentSerializer(data=data)
