@@ -46,17 +46,21 @@ class FileUploadView(APIView):
     def post(self, request, *args, **kwargs):
         try:
             auth_header = request.headers.get('Authorization')
+            print(f"Authorization Header: {auth_header}")
 
             if not auth_header:
                 return Response({"error": "Authorization header missing"}, status=401)
             
             decoded_payload = decode_jwt_token(auth_header)
+            print(f"Decoded Payload: {decoded_payload}")
 
             if 'error' in decoded_payload:
                 return Response({"error": decoded_payload['error']}, status=401)
 
             user_id = decoded_payload.get('user_id')
+            print(f"User ID: {user_id}")
             user = User.objects.get(id=user_id)
+            print(f"User: {user}")
             # request.data['user'] = user.id
             # request.data['file'] = request.FILES.get('file')
 
@@ -74,8 +78,11 @@ class FileUploadView(APIView):
             data = request.data.copy()
             data['user'] = user_id
             data['file'] = request.FILES['file'] 
+            print(f"Data to be serialized: {data}")
 
             serializer = DocumentSerializer(data=data)
+            print(f"Serializer: {serializer}")
+            print(f"Is serializer valid? {serializer.is_valid()}")
 
             if serializer.is_valid():
                 serializer.save()
